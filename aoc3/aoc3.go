@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"unicode"
@@ -51,25 +50,25 @@ func main() {
 		specials = append(specials, specialsOnLine)
 		line++
 	}
-
-	sumOfParts := 0
-	for bound, number := range numberMap {
-		shouldCount := false
-		for offset := -1; offset <= 1; offset++ {
-			if bound.line+offset < 0 || bound.line+offset > len(specials)-1 {
-				continue
-			}
-			for i := 0; i < len(specials[bound.line+offset]); i++ {
-				special := specials[bound.line+offset][i]
-				if bound.left-1 <= special && special <= bound.right+1 {
-					shouldCount = true
-				}
-			}
-		}
-		if shouldCount {
-			sumOfParts += number
-		}
-	}
-
-	fmt.Println(sumOfParts)
+	// PART 1
+	//sumOfParts := 0
+	//for bound, number := range numberMap {
+	//	shouldCount := false
+	//	for offset := -1; offset <= 1; offset++ {
+	//		if bound.line+offset < 0 || bound.line+offset > len(specials)-1 {
+	//			continue
+	//		}
+	//		for i := 0; i < len(specials[bound.line+offset]); i++ {
+	//			special := specials[bound.line+offset][i]
+	//			if bound.left-1 <= special && special <= bound.right+1 {
+	//				shouldCount = true
+	//			}
+	//		}
+	//	}
+	//	if shouldCount {
+	//		sumOfParts += number
+	//	}
+	//}
+	//
+	//fmt.Println(sumOfParts)
 }

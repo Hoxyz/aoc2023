@@ -14,6 +14,11 @@ func check(e error) {
 	}
 }
 
+type card struct {
+	winningNumbers []int
+	actualNumbers  []int
+}
+
 func ParseIntsFromString(s string, separator string) []int {
 	var numbers []int
 	splitString := strings.Split(s, separator)
@@ -31,7 +36,8 @@ func main() {
 	var data, err = os.Open("aoc4input")
 	check(err)
 
-	answer := 0
+	var cards []card
+	var copies []int
 
 	var scanner = bufio.NewScanner(data)
 	for scanner.Scan() {
@@ -40,19 +46,40 @@ func main() {
 		winningNumbers := ParseIntsFromString(strings.Split(allNumbers, "|")[0], " ")
 		actualNumbers := ParseIntsFromString(strings.Split(allNumbers, "|")[1], " ")
 
-		hits := -1
-		for _, number := range actualNumbers {
-			for _, winningNumber := range winningNumbers {
-				if number == winningNumber {
-					hits++
-					break
-				}
-			}
-		}
+		copies = append(copies, 0)
+		cards = append(cards, card{winningNumbers: winningNumbers, actualNumbers: actualNumbers})
+	}
 
-		if hits >= 0 {
-			answer += 1 << hits
+	totalCopies := CalculateTotalCopies(cards, copies)
+	fmt.Println(totalCopies)
+}
+
+func CalculateTotalCopies(cards []card, copies []int) int {
+	currentCopies := 1
+	totalCopies := 0
+	for i := 0; i < len(cards); i++ {
+		hits := GetHitsFromCard(cards[i])
+		currentCopies += copies[i]
+		totalCopies += currentCopies
+		if i+1 < len(cards) {
+			copies[i+1] += currentCopies
+		}
+		if i+hits+1 < len(cards) {
+			copies[i+hits+1] -= currentCopies
 		}
 	}
-	fmt.Println(answer)
+	return totalCopies
+}
+
+func GetHitsFromCard(c card) int {
+	hits := 0
+	for _, number := range c.actualNumbers {
+		for _, winningNumber := range c.winningNumbers {
+			if number == winningNumber {
+				hits++
+				break
+			}
+		}
+	}
+	return hits
 }

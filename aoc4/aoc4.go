@@ -1,40 +1,21 @@
 package main
 
 import (
+	"aoc2023/utils"
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
 
 type card struct {
 	winningNumbers []int
 	actualNumbers  []int
 }
 
-func ParseIntsFromString(s string, separator string) []int {
-	var numbers []int
-	splitString := strings.Split(s, separator)
-	for i := 0; i < len(splitString); i++ {
-		if splitString[i] != "" {
-			number, err := strconv.Atoi(splitString[i])
-			check(err)
-			numbers = append(numbers, number)
-		}
-	}
-	return numbers
-}
-
 func main() {
 	var data, err = os.Open("aoc4input")
-	check(err)
+	utils.Check(err)
 
 	var cards []card
 	var copies []int
@@ -43,8 +24,8 @@ func main() {
 	for scanner.Scan() {
 		var text = scanner.Text()
 		allNumbers := strings.Split(text, ":")[1]
-		winningNumbers := ParseIntsFromString(strings.Split(allNumbers, "|")[0], " ")
-		actualNumbers := ParseIntsFromString(strings.Split(allNumbers, "|")[1], " ")
+		winningNumbers := utils.ParseIntsFromString(strings.Split(allNumbers, "|")[0], " ")
+		actualNumbers := utils.ParseIntsFromString(strings.Split(allNumbers, "|")[1], " ")
 
 		copies = append(copies, 0)
 		cards = append(cards, card{winningNumbers: winningNumbers, actualNumbers: actualNumbers})
